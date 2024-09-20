@@ -1,15 +1,29 @@
-let express=require("express");
+const express = require("express");
+const { userRouter } = require("./routes/user.route");
+const { connnection } = require("./config/db");
 
-let app=express();
+require("dotenv").config();
+const cors = require("cors");
 
-app.get('/',(req,res)=>{
-    res.send("Get the data")
-})
+app = express();
 
-app.listen(8080,()=>{
-    console.log("port is running at 3000!")
-})
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+
+app.use(express.json());
+
+app.use("/", userRouter);
 
 
-
+app.listen(process.env.port, async () => {
+  try {
+    await connnection;
+    console.log(`port is running oon ${process.env.port}`);
+  } catch (err) {
+    console.log(err);
+  }
+});
 
